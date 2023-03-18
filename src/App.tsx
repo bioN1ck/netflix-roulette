@@ -1,26 +1,33 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Counter from './components/Counter/Counter';
+import Search from './components/Search/Search';
+import ResultsFilter from './components/ResultsFilter/ResultsFilter';
+import { Genres } from './models/genres.model';
 
-function App() {
-  return (
-    <div className="App">
+class App extends React.Component {
+
+  private genres = Object.values(Genres).map((genre, id) => ({ id, genre }));
+
+  render() {
+    return <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <img src={logo} className="App-logo" alt="logo" data-testid="react-logo"/>
+        <Counter/>
+        <Search initialValue={''} onSearch={this.handleSearch}/>
+        <ResultsFilter genres={this.genres} onSelect={this.handleGenreSelect}/>
       </header>
     </div>
-  );
+  }
+
+  private handleSearch = (text: string) => {
+    console.log('searched value:', text)
+  }
+
+  private handleGenreSelect = (genre: Genres) => {
+    console.log('selected genre: ', genre);
+  }
 }
 
 export default App;
