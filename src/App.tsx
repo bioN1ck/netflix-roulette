@@ -3,31 +3,31 @@ import logo from './logo.svg';
 import './App.scss';
 import Counter from './components/Counter/Counter';
 import Search from './components/Search/Search';
-import ResultsFilter from './components/ResultsFilter/ResultsFilter';
+import GenreSelect from './components/GenreSelect/GenreSelect';
 import { Genres } from './models/genres.model';
 
-class App extends React.Component {
+function App() {
 
-  private genres = Object.values(Genres).map((genre, id) => ({ id, genre }));
+  const genres = Object.values(Genres).map((genre, id) => ({ id, genre }));
 
-  render() {
-    return <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" data-testid="react-logo"/>
-        <Counter/>
-        <Search initialValue={''} onSearch={this.handleSearch}/>
-        <ResultsFilter genres={this.genres} onSelect={this.handleGenreSelect}/>
-      </header>
-    </div>
-  }
-
-  private handleSearch = (text: string) => {
+  const handleSearch = (text: string) => {
     console.log('searched value:', text)
   }
 
-  private handleGenreSelect = (genre: Genres) => {
+  const handleGenreSelect = (genre: Genres) => {
     console.log('selected genre: ', genre);
   }
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <img src={logo} className="app-logo" alt="logo" data-testid="react-logo"/>
+        <Counter/>
+        <Search initialValue={''} onSearch={handleSearch}/>
+        <GenreSelect genres={genres} onSelect={handleGenreSelect}/>
+      </header>
+    </div>
+  )
 }
 
 export default App;

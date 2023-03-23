@@ -1,4 +1,4 @@
-import { KeyboardEvent, MutableRefObject, useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import './Search.scss';
 
 type SearchProps = {
@@ -7,7 +7,7 @@ type SearchProps = {
 }
 
 function Search({ initialValue, onSearch }: SearchProps) {
-  const inputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = ({ key, target }: KeyboardEvent<HTMLInputElement>): void => {
     (key === 'Enter') && onSearch((target as HTMLInputElement).value);
@@ -18,7 +18,7 @@ function Search({ initialValue, onSearch }: SearchProps) {
   }
 
   return (
-    <div className={'Search'}>
+    <div className={'search'}>
       <input
         type="text"
         ref={inputRef}

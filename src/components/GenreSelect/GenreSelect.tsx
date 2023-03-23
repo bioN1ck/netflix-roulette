@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import './ResultsFilter.scss';
+import './GenreSelect.scss';
 
 import { Genre, Genres } from '../../models/genres.model';
+import classNames from 'classnames';
 
 
 type ResultsFilterProps = {
@@ -10,7 +11,7 @@ type ResultsFilterProps = {
   onSelect: (genre: Genres) => void;
 }
 
-function ResultsFilter(props: ResultsFilterProps) {
+function GenreSelect(props: ResultsFilterProps) {
   const [state, setState] = useState(props);
 
   const handleGenreSelect = (genre: Genres): void => {
@@ -22,11 +23,14 @@ function ResultsFilter(props: ResultsFilterProps) {
   }
 
   return (
-    <div className={'ResultsFilter'}>
+    <div className={'genre-select'}>
       {state.genres.map(({ id, genre }) => {
         return (
           <div
-            className={`ResultsFilter-item${checkActiveness(genre)}`}
+            className={classNames({
+              'genre-select__item': true,
+              'active': checkActiveness(genre)
+            })}
             key={id}
           >
             <a href={'/#'} onClick={() => handleGenreSelect(genre)}>{genre}</a>
@@ -37,9 +41,9 @@ function ResultsFilter(props: ResultsFilterProps) {
   )
 }
 
-ResultsFilter.defaultProps = {
+GenreSelect.defaultProps = {
   genres: [],
   activeGenre: Genres.ALL,
 }
 
-export default ResultsFilter;
+export default GenreSelect;

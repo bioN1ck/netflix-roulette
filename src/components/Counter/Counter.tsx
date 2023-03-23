@@ -9,7 +9,7 @@ class Counter extends Component {
   public render() {
     return createElement(
       'div',
-      { className: 'Counter' },
+      { className: 'counter' },
       createElement('button', { onClick: this.decrement }, '-'),
       createElement('span', null, this.state.counter),
       createElement('button', { onClick: this.increment }, '+'),
