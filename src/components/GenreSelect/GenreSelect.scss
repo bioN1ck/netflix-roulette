@@ -1,0 +1,21 @@
+.genre-select {
+  display: flex;
+  height: 60px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    border-bottom: 4px solid transparent;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    &.active {
+      border-bottom: 4px solid #F65261;
+    }
+  }
+}
