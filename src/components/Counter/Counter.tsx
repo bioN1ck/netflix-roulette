@@ -3,8 +3,19 @@ import './Counter.scss';
 
 const INIT_COUNT = 0;
 
-class Counter extends Component {
-  public state = { counter: INIT_COUNT }
+type CounterProps = {
+  counter?: number;
+}
+
+class Counter extends Component<CounterProps> {
+  public state = { counter: INIT_COUNT };
+
+  constructor(props: CounterProps) {
+    super(props);
+    if (props.counter) {
+      this.state.counter = props.counter;
+    }
+  }
 
   public render() {
     return createElement(
