@@ -1,4 +1,4 @@
-import { Component, createElement } from 'react';
+import { Component, createElement as el } from 'react';
 import './Counter.scss';
 
 const INIT_COUNT = 0;
@@ -18,12 +18,10 @@ class Counter extends Component<CounterProps> {
   }
 
   public render() {
-    return createElement(
-      'div',
-      { className: 'counter' },
-      createElement('button', { onClick: this.decrement }, '-'),
-      createElement('span', null, this.state.counter),
-      createElement('button', { onClick: this.increment }, '+'),
+    return el('div', { className: 'counter' },
+      el('button', { onClick: this.decrement, 'data-cy': 'decrement-btn' }, '-'),
+      el('span', { 'data-cy': 'counter' }, this.state.counter),
+      el('button', { onClick: this.increment, 'data-cy': 'increment-btn' }, '+'),
     );
   }
 
