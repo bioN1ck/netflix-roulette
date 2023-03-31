@@ -7,34 +7,38 @@ import classNames from 'classnames';
 
 type ResultsFilterProps = {
   genres: Genre[];
-  activeGenre: Genres;
+  selectedGenre: Genres;
   onSelect: (genre: Genres) => void;
 }
 
 function GenreSelect(props: ResultsFilterProps) {
-  const [state, setState] = useState(props);
+  const [genres] = useState(props.genres);
+  const [selectedGenre, setSelectedGenre] = useState(props.selectedGenre);
 
   const handleGenreSelect = (genre: Genres): void => {
-    state.onSelect(genre);
-    setState({ ...state, activeGenre: genre });
+    props.onSelect(genre);
+    setSelectedGenre(genre);
   };
-  const checkActiveness = (genre: Genres): string => {
-    return genre === state.activeGenre ? ' active' : '';
+  const isGenreSelected = (genre: Genres): boolean => {
+    return genre === selectedGenre;
   }
 
   return (
-    <div className={'genre-select'}>
-      {state.genres.map(({ id, genre }) => {
+    <div className={'genre-select'} role="tablist">
+      {genres.map(({ id, genre }) => {
         return (
-          <div
+          <button
             className={classNames({
               'genre-select__item': true,
-              'active': checkActiveness(genre)
+              'selected': isGenreSelected(genre)
             })}
+            aria-selected={isGenreSelected(genre)}
             key={id}
+            role="tab"
+            onClick={() => handleGenreSelect(genre)}
           >
-            <a href={'/#'} onClick={() => handleGenreSelect(genre)}>{genre}</a>
-          </div>
+            {genre}
+          </button>
         );
       })}
     </div>
@@ -43,7 +47,8 @@ function GenreSelect(props: ResultsFilterProps) {
 
 GenreSelect.defaultProps = {
   genres: [],
-  activeGenre: Genres.ALL,
+  selectedGenre: Genres.ALL,
+  onSelect: () => {}
 }
 
 export default GenreSelect;

@@ -31,4 +31,9 @@ function Search({ initialValue, onSearch }: SearchProps) {
   );
 }
 
+Search.defaultProps = {
+  initialValue: '',
+  onSearch: () => {},
+}
+
 export default Search;
