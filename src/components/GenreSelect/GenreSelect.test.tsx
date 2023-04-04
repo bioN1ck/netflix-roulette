@@ -1,14 +1,14 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { Genre, Genres } from '../../models/genres.model';
+import { Genres } from '../../models/genres.model';
 import GenreSelect from './GenreSelect';
 
 describe('GenreSelect', () => {
-  let genres: Genre[];
+  let genres: Genres[];
 
   beforeEach(() => {
-    genres = Object.values(Genres).map((genre, id) => ({ id, genre }));
+    genres = Object.values(Genres);
   });
 
   it('should render all passed genres', () => {

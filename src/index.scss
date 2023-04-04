@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500&family=Montserrat:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
 
-body {
+body, p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
 }
@@ -16,6 +16,20 @@ button {
   font-size: inherit;
   font-weight: inherit;
   color: inherit;
+}
+
+button {
+  color: #ffffff;
+  background-color: #f65261;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:active {
+    background-color: #bd323f;
+  }
 }
 
 code {

@@ -2,11 +2,21 @@ import { KeyboardEvent, useRef } from 'react';
 import './Search.scss';
 
 type SearchProps = {
-  initialValue: string;
+  /**
+   * Set if it needs a predefined value
+   */
+  initialValue?: string;
+  /**
+   * Callback which pass the search string to the parent component
+   * @param val A search string
+   */
   onSearch: (val: string) => void;
 }
 
-function Search({ initialValue, onSearch }: SearchProps) {
+/**
+ * The UI component for searching a film
+ */
+function Search({ initialValue = '', onSearch }: SearchProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = ({ key, target }: KeyboardEvent<HTMLInputElement>): void => {

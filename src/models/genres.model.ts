@@ -5,8 +5,3 @@ export enum Genres {
   HORROR = 'Horror',
   CRIME = 'Crime'
 }
-
-export type Genre = {
-  id: number;
-  genre: Genres;
-}
