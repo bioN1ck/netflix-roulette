@@ -29,20 +29,20 @@ function GenreSelect({
   selectedGenre = Genres.ALL,
   onSelect
 }: ResultsFilterProps) {
-  const [getGenres] = useState(genres);
-  const [getSelectedGenre, setSelectedGenre] = useState(selectedGenre);
+  const [genresState] = useState(genres);
+  const [selectedGenreState, setSelectedGenreState] = useState(selectedGenre);
 
   const handleGenreSelect = (genre: Genres): void => {
     onSelect && onSelect(genre);
-    setSelectedGenre(genre);
+    setSelectedGenreState(genre);
   };
   const isGenreSelected = (genre: Genres): boolean => {
-    return genre === getSelectedGenre;
+    return genre === selectedGenreState;
   }
 
   return (
     <div className={'genre-select'} role="tablist">
-      {getGenres.map((genre, id) => {
+      {genresState.map((genre, id) => {
         return (
           <button
             className={classNames({
