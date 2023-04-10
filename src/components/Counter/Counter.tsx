@@ -4,9 +4,15 @@ import './Counter.scss';
 const INIT_COUNT = 0;
 
 type CounterProps = {
+  /**
+   * Set default counter
+   */
   counter?: number;
 }
 
+/**
+ * The UI component for setting amount of something
+ */
 class Counter extends Component<CounterProps> {
   public state = { counter: INIT_COUNT };
 

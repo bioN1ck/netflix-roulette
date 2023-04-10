@@ -1,16 +1,16 @@
 .genre-select {
   display: flex;
   height: 60px;
+  margin-bottom: 1rem;
 
   button {
     margin: 0 15px;
     padding: 0;
-    color: #fff;
-    text-transform: uppercase;
     background-color: transparent;
     border-width: 0 0 4px;
     border-color: transparent;
-    cursor: pointer;
+    border-style: solid;
+    font-size: 1rem;
 
     &.selected {
       border-bottom: 4px solid #F65261;

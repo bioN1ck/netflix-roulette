@@ -1,31 +1,48 @@
 import { useState } from 'react';
 import './GenreSelect.scss';
 
-import { Genre, Genres } from '../../models/genres.model';
+import { Genres } from '../../models/genres.model';
 import classNames from 'classnames';
 
 
 type ResultsFilterProps = {
-  genres: Genre[];
-  selectedGenre: Genres;
-  onSelect: (genre: Genres) => void;
+  /**
+   * The list of genres which will be rendered
+   */
+  genres: Genres[];
+  /**
+   * A preselected genre
+   */
+  selectedGenre?: Genres;
+  /**
+   * Callback for pass a selected genre to a parent
+   * @param genre
+   */
+  onSelect?: (genre: Genres) => void;
 }
 
-function GenreSelect(props: ResultsFilterProps) {
-  const [genres] = useState(props.genres);
-  const [selectedGenre, setSelectedGenre] = useState(props.selectedGenre);
+/**
+ * The UI component for selecting a genre from the list of genres
+ */
+function GenreSelect({
+  genres = [],
+  selectedGenre = Genres.ALL,
+  onSelect
+}: ResultsFilterProps) {
+  const [genresState] = useState(genres);
+  const [selectedGenreState, setSelectedGenreState] = useState(selectedGenre);
 
   const handleGenreSelect = (genre: Genres): void => {
-    props.onSelect(genre);
-    setSelectedGenre(genre);
+    onSelect && onSelect(genre);
+    setSelectedGenreState(genre);
   };
   const isGenreSelected = (genre: Genres): boolean => {
-    return genre === selectedGenre;
+    return genre === selectedGenreState;
   }
 
   return (
     <div className={'genre-select'} role="tablist">
-      {genres.map(({ id, genre }) => {
+      {genresState.map((genre, id) => {
         return (
           <button
             className={classNames({
@@ -43,12 +60,6 @@ function GenreSelect(props: ResultsFilterProps) {
       })}
     </div>
   )
-}
-
-GenreSelect.defaultProps = {
-  genres: [],
-  selectedGenre: Genres.ALL,
-  onSelect: () => {}
 }
 
 export default GenreSelect;
