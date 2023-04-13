@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, HTMLInputTypeAttribute } from 'react';
+import { BaseSyntheticEvent } from 'react';
 import styled from 'styled-components';
 
 type Props<R = string> = {

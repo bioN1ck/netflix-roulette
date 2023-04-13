@@ -150,6 +150,6 @@ function Select<T extends string>({
       </SelectBody>
     </SelectContainer>
   );
-};
+}
 
 export default Select;

@@ -40,6 +40,6 @@ function Textarea({
       onChange={handleValueChange}
     />
   );
-};
+}
 
 export default Textarea;

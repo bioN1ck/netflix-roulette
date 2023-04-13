@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Dialog from '../../components/Dialog/Dialog';
-import { PropsWithChildren } from 'react';
 
 
-function TriggerButton(props: PropsWithChildren<{}>) {
+function TriggerButton() {
   return (
       <button>Open a dialog</button>
     );

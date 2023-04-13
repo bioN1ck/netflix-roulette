@@ -32,6 +32,6 @@ function MovieDetails({ movie }: MovieDetailsProps) {
       </div>
     </div>
   )
-};
+}
 
 export default MovieDetails;
