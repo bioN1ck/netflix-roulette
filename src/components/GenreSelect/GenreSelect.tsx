@@ -13,7 +13,7 @@ type ResultsFilterProps = {
   /**
    * A preselected genre
    */
-  selectedGenre?: Genres;
+  preSelectedGenre?: Genres;
   /**
    * Callback for pass a selected genre to a parent
    * @param genre
@@ -25,24 +25,23 @@ type ResultsFilterProps = {
  * The UI component for selecting a genre from the list of genres
  */
 function GenreSelect({
-  genres = [],
-  selectedGenre = Genres.ALL,
+  genres,
+  preSelectedGenre = Genres.ALL,
   onSelect
 }: ResultsFilterProps) {
-  const [genresState] = useState(genres);
-  const [selectedGenreState, setSelectedGenreState] = useState(selectedGenre);
+  const [selectedGenre, setSelectedGenre] = useState(preSelectedGenre);
 
   const handleGenreSelect = (genre: Genres): void => {
     onSelect && onSelect(genre);
-    setSelectedGenreState(genre);
+    setSelectedGenre(genre);
   };
   const isGenreSelected = (genre: Genres): boolean => {
-    return genre === selectedGenreState;
+    return genre === selectedGenre;
   }
 
   return (
     <div className={'genre-select'} role="tablist">
-      {genresState.map((genre, id) => {
+      {genres.map((genre, id) => {
         return (
           <button
             className={classNames({

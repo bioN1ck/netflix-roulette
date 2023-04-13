@@ -1,12 +1,18 @@
 import './MovieDetails.scss';
 import { Movie } from '../../models/movie.model';
 
+export const handleDuration = (duration: number) => {
+  const hours = Math.floor(duration / 60);
+  const minutes = duration % 60;
+
+  return `${hours && hours + 'h '}${minutes ? minutes : '0'}m`;
+}
 
 export type MovieDetailsProps = {
   movie: Movie;
 };
 
-export function MovieDetails({ movie }: MovieDetailsProps) {
+function MovieDetails({ movie }: MovieDetailsProps) {
   return (
     <div className={'movie-details'}>
       <img src={movie.imageUrl} alt=""/>
@@ -20,10 +26,12 @@ export function MovieDetails({ movie }: MovieDetailsProps) {
         </div>
         <div className={'movie-details__metadata'}>
           <span>{movie.releaseYear}</span>
-          <span>{movie.duration}</span>
+          <span>{handleDuration(movie.duration)}</span>
         </div>
         <p className={'movie-details__description'}>{movie.description}</p>
       </div>
     </div>
   )
-}
+};
+
+export default MovieDetails;
