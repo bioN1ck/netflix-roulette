@@ -21,9 +21,9 @@ export const Default: Story = {
   },
 };
 
-export const Predefined: Story = {
+export const Preselected: Story = {
   args: {
     genres: GENRES,
-    selectedGenre: Genres.DOCUMENTARY,
+    preSelectedGenre: Genres.DOCUMENTARY,
   },
 };

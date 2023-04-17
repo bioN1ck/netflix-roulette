@@ -22,7 +22,7 @@ describe('GenreSelect', () => {
   });
 
   it('should highlight a selected genre passed in props', () => {
-    render(<GenreSelect genres={genres} selectedGenre={Genres.HORROR}/>);
+    render(<GenreSelect genres={genres} preSelectedGenre={Genres.HORROR}/>);
     const element = screen.getByRole('tab', { selected: true });
 
     expect(element).toHaveTextContent(Genres.HORROR);

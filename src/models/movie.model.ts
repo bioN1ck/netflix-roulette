@@ -5,7 +5,7 @@ export type Movie = {
   movieName: string;
   releaseYear: number;
   rating: number;
-  duration: string;
+  duration: number;
   description: string;
   relevantGenres: Genres[];
 }

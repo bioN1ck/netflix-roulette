@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import png from '../../assets/pulp-fiction.png';
-import { MovieDetails } from '../../components/MovieDetails/MovieDetails';
+import MovieDetails from '../../components/MovieDetails/MovieDetails';
 import { Genres } from '../../models/genres.model';
 import { Movie } from '../../models/movie.model';
 
@@ -17,7 +17,7 @@ const MOVIE: Movie = {
         by Wallace to lose his fight. The lives of these seemingly unrelated people
         are woven together comprising of a series of funny, bizarre and uncalled-for
         incidents.—Soumitra`,
-  duration: '2h 34min',
+  duration: 154,
   rating: 8.9,
   releaseYear: 1994,
   relevantGenres: [Genres.CRIME, Genres.COMEDY]

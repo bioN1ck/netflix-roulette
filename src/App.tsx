@@ -4,6 +4,11 @@ import Counter from './components/Counter/Counter';
 import Search from './components/Search/Search';
 import GenreSelect from './components/GenreSelect/GenreSelect';
 import { Genres } from './models/genres.model';
+import Dialog from './components/Dialog/Dialog';
+import Input from './components/Input/Input';
+import MovieForm from './components/MovieForm/MovieForm';
+import Button from './components/Button/Button';
+import LabeledInput from './components/LabeledInput/LabeledInput';
 
 
 function App() {
@@ -24,6 +29,15 @@ function App() {
         <Counter/>
         <Search initialValue={''} onSearch={handleSearch}/>
         <GenreSelect genres={genres} onSelect={handleGenreSelect}/>
+        <Dialog
+          trigger={<Button>Open a dialog</Button>}
+          title={'Add movie'}
+        >
+          <MovieForm />
+        </Dialog>
+        <LabeledInput label={'Name'}>
+          <Input placeholder={'Type a name of movie'}/>
+        </LabeledInput>
       </header>
     </div>
   )
