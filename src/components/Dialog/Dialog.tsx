@@ -6,7 +6,7 @@ import { BG_COLOR, TEXT_COLOR } from '../../styles/constants';
 type Props = {
   title?: string | ReactNode;
   trigger: string | ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const DialogTriggerContainer = styled('div')``;
@@ -87,7 +87,7 @@ function Dialog({ title = '', trigger, onClose, children }: PropsWithChildren<Pr
               <DialogBody>
                 {title && <DialogTitle>{title}</DialogTitle>}
                 {children}
-                <DialogCloseBtn onClick={() => {onClose(); closePortal()}}></DialogCloseBtn>
+                <DialogCloseBtn onClick={() => {onClose && onClose(); closePortal()}}></DialogCloseBtn>
               </DialogBody>
             </DialogBackdrop>
           )}

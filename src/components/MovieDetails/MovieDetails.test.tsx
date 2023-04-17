@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import MovieDetails, { handleDuration } from './MovieDetails';
+import MovieDetails, { getDuration } from './MovieDetails';
 import { Movie } from '../../models/movie.model';
 import { Genres } from '../../models/genres.model';
 
@@ -19,7 +19,7 @@ describe('MovieDetails', () => {
   it('should render passed movie', () => {
     render(<MovieDetails movie={movie} />);
 
-    const duration = handleDuration(movie.duration);
+    const duration = getDuration(movie.duration);
 
     expect(screen.getByText(movie.movieName)).toBeInTheDocument();
     expect(screen.getByText(movie.description)).toBeInTheDocument();

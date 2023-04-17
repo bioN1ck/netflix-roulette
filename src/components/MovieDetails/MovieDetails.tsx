@@ -1,7 +1,7 @@
 import './MovieDetails.scss';
 import { Movie } from '../../models/movie.model';
 
-export const handleDuration = (duration: number) => {
+export const getDuration = (duration: number) => {
   const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
 
@@ -26,7 +26,7 @@ function MovieDetails({ movie }: MovieDetailsProps) {
         </div>
         <div className={'movie-details__metadata'}>
           <span>{movie.releaseYear}</span>
-          <span>{handleDuration(movie.duration)}</span>
+          <span>{getDuration(movie.duration)}</span>
         </div>
         <p className={'movie-details__description'}>{movie.description}</p>
       </div>

@@ -32,7 +32,6 @@ function App() {
         <Dialog
           trigger={<Button>Open a dialog</Button>}
           title={'Add movie'}
-          onClose={() => {}}
         >
           <MovieForm />
         </Dialog>
