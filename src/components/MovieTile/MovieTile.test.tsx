@@ -1,28 +1,31 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { MovieTile } from './MovieTile';
+import MovieTile from './MovieTile';
 import { Genres } from '../../models/genres.model';
+import { Movie } from '../../models/movie.model';
 
 
 describe('MovieTile', () => {
-  let imageUrl = 'some/url';
-  let movieName = 'Some Movie Name';
-  let releaseYear = 2015;
-  let relevantGenres = [Genres.HORROR];
+  let movie: Movie = {
+    imageUrl: 'some/url',
+    movieName: 'Some Movie Name',
+    description: `Some description.`,
+    duration: 100,
+    rating: 6.1,
+    releaseYear: 2016,
+    relevantGenres: [Genres.DOCUMENTARY]
+  };
   let onClick = () => {}
 
   it('should render passed props', () => {
     render(<MovieTile
-      imageUrl={imageUrl}
-      movieName={movieName}
-      releaseYear={releaseYear}
-      relevantGenres={relevantGenres}
+      movie={movie}
       onClick={onClick}
     />);
 
-    expect(screen.getByText(movieName)).toBeInTheDocument();
-    expect(screen.getByText(releaseYear)).toBeInTheDocument();
-    expect(screen.getByText(relevantGenres[0])).toBeInTheDocument();
+    expect(screen.getByText(movie.movieName)).toBeInTheDocument();
+    expect(screen.getByText(movie.releaseYear)).toBeInTheDocument();
+    expect(screen.getByText(movie.relevantGenres[0])).toBeInTheDocument();
   });
 });
