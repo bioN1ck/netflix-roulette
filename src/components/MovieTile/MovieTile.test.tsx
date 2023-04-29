@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
 import MovieTile from './MovieTile';
 import { Genres } from '../../models/genres.model';
@@ -16,13 +17,9 @@ describe('MovieTile', () => {
     releaseYear: 2016,
     relevantGenres: [Genres.DOCUMENTARY]
   };
-  let onClick = () => {}
 
   it('should render passed props', () => {
-    render(<MovieTile
-      movie={movie}
-      onClick={onClick}
-    />);
+    render(<MovieTile movie={movie} />, { wrapper: BrowserRouter });
 
     expect(screen.getByText(movie.movieName)).toBeInTheDocument();
     expect(screen.getByText(movie.releaseYear)).toBeInTheDocument();

@@ -7,6 +7,7 @@ import { Genres } from '../../models/genres.model';
 
 describe('MovieDetails', () => {
   let movie: Movie = {
+    id: 134,
     imageUrl: 'some/url',
     movieName: 'Some Movie Name',
     description: `Some description.`,

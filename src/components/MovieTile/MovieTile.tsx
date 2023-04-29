@@ -1,14 +1,20 @@
 import './MovieTile.scss';
 import { Movie } from '../../models/movie.model';
+import { Link, useLocation } from 'react-router-dom';
 
 type MovieTileProps = {
   movie: Movie;
-  onClick: (movie: Movie) => void;
 }
 
-function MovieTile({ movie, onClick }: MovieTileProps) {
+function MovieTile({ movie }: MovieTileProps) {
+  const { search } = useLocation();
+
   return (
-    <div className={'movie-tile'} onClick={() => onClick(movie)} data-cy="movie-tile">
+    <Link
+      to={`/${movie.id}${search}`}
+      className={'movie-tile'}
+      data-cy="movie-tile"
+    >
       <img src={movie.imageUrl} alt=""/>
       <div className={'movie-tile__description'}>
         <div>
@@ -23,7 +29,7 @@ function MovieTile({ movie, onClick }: MovieTileProps) {
         <div></div>
         <div></div>
       </div>
-    </div>
+    </Link>
   );
 }
 
