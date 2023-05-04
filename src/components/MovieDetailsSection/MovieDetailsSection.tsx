@@ -1,4 +1,4 @@
-import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Movie } from '../../models/movie.model';
@@ -6,14 +6,14 @@ import Logo from '../Logo/Logo';
 import MovieDetails from '../MovieDetails/MovieDetails';
 import { BG_COLOR } from '../../styles/constants';
 import search from '../../assets/search.svg';
-import { mapMovie } from '../../helpers/functions';
+import { mapRawToMovie } from '../../helpers/functions';
 
 
 export async function loader({ params }: { params: any }) {
   const url: string = `http://localhost:4000/movies/${params.movieId}`;
   const result = await fetch(url);
   const data = await result.json();
-  return mapMovie(data);
+  return mapRawToMovie(data);
 }
 
 const MovieListPageDetailsContainer = styled.div`
@@ -67,6 +67,7 @@ export default function MovieDetailsSection() {
         <MovieListPageSearchButton onClick={() => navigate(`/${search}`)} />
       </MovieListPageRow>
       <MovieDetails movie={movie} />
+      <Outlet context={movie} />
     </MovieListPageDetailsContainer>
   )
 }

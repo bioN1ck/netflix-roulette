@@ -16,7 +16,7 @@ const Container = styled('div')`
 const MOVIE: Movie = {
   imageUrl: 'https://some-movie.com/some-movie',
   movieName: 'Pulp Fiction',
-  releaseYear: 1994,
+  releaseYear: '1994',
   rating: 7.9,
   duration: 94,
   description: 'Very interesting movie',

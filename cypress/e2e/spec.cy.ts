@@ -15,7 +15,7 @@ describe('App', () => {
       cy.getEl('search').find('> button').click();
 
       cy.getEl('movie-count').find('span').should('contain', 234);
-      cy.getEl('movie-list').find('> a').should('have.length', 12);
+      cy.getEl('movie-list').find('> div').should('have.length', 12);
       cy.url().should('include', 'search=la');
     });
 
@@ -24,7 +24,7 @@ describe('App', () => {
       cy.getEl('search').find('> button').click();
 
       cy.getEl('movie-count').find('span').should('contain', 0);
-      cy.getEl('movie-list').find('> a').should('have.length', 0);
+      cy.getEl('movie-list').find('> div').should('have.length', 0);
       cy.url().should('include', 'search=lasdfasdfsfsdfdfs');
     });
 
@@ -32,7 +32,7 @@ describe('App', () => {
       cy.getEl('search').find('> input').type('later').type('{Enter}');
 
       cy.getEl('movie-count').find('span').should('contain', 4);
-      cy.getEl('movie-list').find('> a').should('have.length', 4);
+      cy.getEl('movie-list').find('> div').should('have.length', 4);
       cy.url().should('include', 'search=later');
     });
 
@@ -92,7 +92,7 @@ describe('App', () => {
     });
 
     it('should select a movie and render details about it', () => {
-      cy.getEl('movie-list').find('> a:nth-child(1)').click();
+      cy.getEl('movie-list').find('> div:nth-child(1)').click();
 
       cy.getEl('movie-details').should('exist');
       cy.getEl('movie-search-bar').should('not.exist');
@@ -100,7 +100,7 @@ describe('App', () => {
     });
 
     it('should select a movie and return back to search bar by clicking a button', () => {
-      cy.getEl('movie-list').find('> a:nth-child(2)').click();
+      cy.getEl('movie-list').find('> div:nth-child(2)').click();
 
       cy.getEl('movie-details').should('exist');
       cy.getEl('movie-search-bar').should('not.exist');

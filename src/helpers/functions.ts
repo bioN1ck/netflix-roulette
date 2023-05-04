@@ -1,15 +1,32 @@
 import { Movie, MovieRaw, MovieResponse } from '../models/movie.model';
 import { Genres } from '../models/genres.model';
+import { BASE_URL } from './constants';
+import { GenreOption, MovieFormType } from '../components/MovieForm/MovieForm';
 
-export const mapMovie = (res: MovieRaw): Movie => ({
+export const mapRawToMovie = (res: MovieRaw): Movie => ({
   id: res.id,
   imageUrl: res.poster_path,
   movieName: res.title,
   relevantGenres: res.genres as Genres[],
-  releaseYear: new Date(res.release_date).getFullYear(),
+  releaseYear: new Date(res.release_date).getFullYear().toString(),
   duration: res.runtime,
   description: res.overview,
   rating: res.vote_average,
+});
+
+const mapGenreToOption = (genre: Genres): GenreOption => ({
+  label: genre,
+  value: genre.toString(),
+});
+
+export const mapMovieToForm = (movie?: Movie): MovieFormType => ({
+  poster_path: movie ? movie.imageUrl : '',
+  title: movie ? movie.movieName : '',
+  release_date: movie ? movie.releaseYear.toString() : '', // TODO: rework with Date object
+  vote_average: movie ? movie.rating : 0,
+  runtime: movie ? movie.duration : 0,
+  overview: movie ? movie.description : '',
+  genres: movie ? movie.relevantGenres.map(mapGenreToOption) : [],
 });
 
 type MovieSet = {
@@ -24,7 +41,6 @@ export enum Fields {
 }
 
 export const searchMovie = (signal: AbortSignal, searchParams: URLSearchParams): Promise<MovieSet> => {
-  const url: string = 'http://localhost:4000/movies';
   const baseParams = {
     sortBy: 'release_date',
     searchBy: 'title',
@@ -39,13 +55,13 @@ export const searchMovie = (signal: AbortSignal, searchParams: URLSearchParams):
       return acc;
     }, {} as {[key in Fields]: string});
 
-  return fetch(`${url}?` + new URLSearchParams({
+  return fetch(`${BASE_URL}?` + new URLSearchParams({
       ...baseParams,
       ...extraParams,
     }), { signal })
       .then((res) => res.json())
       .then(({data, totalAmount}: MovieResponse) => ({
-          movies: data.map(mapMovie),
+          movies: data.map(mapRawToMovie),
           total: totalAmount,
         })
       );

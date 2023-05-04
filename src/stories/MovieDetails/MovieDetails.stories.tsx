@@ -19,7 +19,7 @@ const MOVIE: Movie = {
         incidents.—Soumitra`,
   duration: 154,
   rating: 8.9,
-  releaseYear: 1994,
+  releaseYear: '1994',
   relevantGenres: [Genres.CRIME, Genres.COMEDY]
 };
 

@@ -2,7 +2,10 @@
   width: 322px;
   position: relative;
   color: #ffffff;
-  text-decoration: none;
+
+  a {
+    text-decoration: none;
+  }
 
   img {
     width: 100%;

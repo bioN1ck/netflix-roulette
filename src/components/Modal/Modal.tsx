@@ -1,18 +1,15 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React, { PropsWithChildren, ReactNode, useEffect } from 'react';
+import { Portal } from 'react-portal';
 import styled from 'styled-components';
-import { PortalWithState } from 'react-portal';
 import { BG_COLOR, TEXT_COLOR } from '../../styles/constants';
 
 type Props = {
   title?: string | ReactNode;
-  trigger: string | ReactNode;
   onClose?: () => void;
 }
 
-const DialogTriggerContainer = styled('div')``;
-
 const DialogBackdrop = styled('div')`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -29,7 +26,7 @@ const DialogBody = styled('div')`
   background: ${BG_COLOR};
   min-width: 686px;
   box-sizing: border-box;
-  padding: 60px;
+  padding: 40px 60px;
   color: ${TEXT_COLOR};
   position: relative;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1),
@@ -75,28 +72,23 @@ const DialogCloseBtn = styled('button')`
   }
 `;
 
-function Dialog({ title = '', trigger, onClose, children }: PropsWithChildren<Props>) {
-  return (
-    <PortalWithState closeOnEsc>
-      {({ openPortal, closePortal, portal }) => (
-        <React.Fragment>
-          <DialogTriggerContainer onClick={openPortal}>
-            {trigger}
-          </DialogTriggerContainer>
-          {portal(
-            <DialogBackdrop>
-              <DialogBody>
-                {title && <DialogTitle>{title}</DialogTitle>}
-                {children}
-                <DialogCloseBtn onClick={() => {onClose && onClose(); closePortal()}}></DialogCloseBtn>
-              </DialogBody>
-            </DialogBackdrop>
-          )}
-        </React.Fragment>
-      )}
-    </PortalWithState>
+export default function Modal({ title, children, onClose }: PropsWithChildren<Props>) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    }
+  });
 
+  return (
+    <Portal>
+      <DialogBackdrop>
+        <DialogBody>
+          {title && <DialogTitle>{title}</DialogTitle>}
+          {children}
+          <DialogCloseBtn onClick={() => {onClose && onClose()}}></DialogCloseBtn>
+        </DialogBody>
+      </DialogBackdrop>
+    </Portal>
   )
 }
-
-export default Dialog;

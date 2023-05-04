@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -55,7 +55,10 @@ const MovieListPageSearchTitle = styled.div`
 
 export default function MovieSearchSection() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('search') || '');
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchParams.get(Fields.SEARCH) || ''
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     searchQuery
@@ -69,7 +72,7 @@ export default function MovieSearchSection() {
     <MovieListPageHeader data-cy="movie-search-bar">
       <MovieListPageRow align={'flex-start'}>
         <Logo />
-        <Button size={'small'} theme={'blurred'}>
+        <Button size={'small'} theme={'blurred'} onClick={() => navigate('/new')}>
           + Add Movie
         </Button>
       </MovieListPageRow>
@@ -79,6 +82,7 @@ export default function MovieSearchSection() {
         </MovieListPageSearchTitle>
         <Search initialValue={searchQuery} onSearch={setSearchQuery} />
       </MovieListPageSearchContainer>
+      <Outlet />
     </MovieListPageHeader>
   )
 }
