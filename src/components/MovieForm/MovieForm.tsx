@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { Controller, useForm } from 'react-hook-form';
 
 import Input from '../Input/Input';
 import Textarea from '../Textarea/Textarea';
 import Button from '../Button/Button';
-import Select from '../Select/Select';
 import LabeledInput from '../LabeledInput/LabeledInput';
 import { Movie } from '../../models/movie.model';
 import { Genres } from '../../models/genres.model';
+import { PRIMARY_COLOR } from '../../styles/constants';
+import StyledSelect from '../StyledSelect/StyledSelect';
+import { mapMovieToForm } from '../../helpers/functions';
 
-
-type Props = {
-  movie?: Movie;
-  onChange?: (movie: Movie) => void;
-}
 
 const MovieFormContainer = styled('form')`
   width: 856px;
@@ -37,48 +35,87 @@ const SubmitButton = styled(Button)`
   margin-left: 13px;
 `;
 
-function MovieForm({ movie, onChange }: Props) {
-  const [imageUrl, setImageUrl] = useState<string>(movie?.imageUrl || '');
-  const [movieName, setMovieName] = useState<string>(movie?.movieName || '');
-  const [releaseYear, setReleaseYear] = useState<number>(movie?.releaseYear || 0);
-  const [rating, setRating] = useState<number>(movie?.rating || 0);
-  const [duration, setDuration] = useState<number>(movie?.duration || 0);
-  const [description, setDescription] = useState<string>(movie?.description || '');
-  const [relevantGenres, setRelevantGenres] = useState<Genres[]>(movie?.relevantGenres || []);
+const ErrorText = styled('span')`
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 14px;
+  color: ${PRIMARY_COLOR};
+`;
 
-  const handleSubmit = (event: any) => {
-    const editedMovie = {
-      imageUrl,
-      movieName,
-      releaseYear,
-      rating,
-      duration,
-      description,
-      relevantGenres,
-    };
-    onChange && onChange(editedMovie);
-    event.preventDefault();
+type Props = {
+  movie?: Movie;
+  onChange?: (movie: MovieDTO) => void;
+}
+
+export type GenreOption = { label: Genres; value: string; };
+
+export type MovieFormType = {
+  title: string;
+  tagline?: string;
+  vote_average: number;
+  vote_count?: number;
+  release_date: string;
+  poster_path: string;
+  overview: string;
+  budget?: number;
+  revenue?: number;
+  runtime: number;
+  genres: GenreOption[];
+};
+
+export type MovieDTO = Omit<MovieFormType, 'genres'> & { genres: string[]; id?: number };
+
+function MovieForm({ movie, onChange }: Props) {
+  const {
+    control,
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<MovieFormType>({ shouldUseNativeValidation: false });
+
+  const defaultMovieForm: MovieFormType = mapMovieToForm(movie);
+
+  const onReset = () => {
+    reset(defaultMovieForm);
   }
+
+  const onSubmit = (data: MovieFormType) => {
+    const movieDto: MovieDTO = {...data, genres: data.genres.map(g => g.value)};
+    onChange && onChange(movieDto);
+  }
+
+  const options = Object.values(Genres).slice(1).map(value => ({
+    value: value as string,
+    label: value.toString(),
+  }));
+
   return (
-    <MovieFormContainer onSubmit={handleSubmit}>
+    <MovieFormContainer onSubmit={handleSubmit(onSubmit)} noValidate>
       <MovieFormRow>
         <MovieFormLeftCol>
           <LabeledInput label={'Name'}>
             <Input
-              initValue={movie?.movieName}
+              type={'text'}
+              defaultValue={movie?.movieName}
               placeholder={'Enter a name of movie'}
-              onChange={setMovieName}
+              { ...register('title', {required: true})}
             />
+            {errors.title && <ErrorText>Movie name is required</ErrorText>}
           </LabeledInput>
         </MovieFormLeftCol>
         <MovieFormRightCol>
           <LabeledInput label={'Release Year'}>
-            <Input<number>
+            <Input
               type={'number'}
-              initValue={movie?.releaseYear}
+              defaultValue={movie?.releaseYear}
+              min={1900}
+              max={new Date().getFullYear()}
               placeholder={'Select Year'}
-              onChange={setReleaseYear}
+              {...register('release_date', {min: 1900, max: new Date().getFullYear()})}
             />
+            {errors.release_date?.type === 'min' && <ErrorText>Rating must be greater than 1900</ErrorText>}
+            {errors.release_date?.type === 'max' && <ErrorText>Rating must be less than {new Date().getFullYear()}</ErrorText>}
           </LabeledInput>
         </MovieFormRightCol>
       </MovieFormRow>
@@ -87,43 +124,59 @@ function MovieForm({ movie, onChange }: Props) {
           <LabeledInput label={'Movie Image URL'}>
             <Input
               type={'url'}
-              initValue={movie?.imageUrl}
+              defaultValue={movie?.imageUrl}
               placeholder={'https://'}
-              onChange={setImageUrl}
+              {...register('poster_path', {required: true})}
             />
+            {errors.poster_path && <ErrorText>Movie poster URL is required</ErrorText>}
           </LabeledInput>
         </MovieFormLeftCol>
         <MovieFormRightCol>
           <LabeledInput label={'Rating'}>
-            <Input<number>
-              initValue={movie?.rating}
+            <Input
               type={'number'}
+              defaultValue={movie?.rating}
               placeholder={'7.8'}
-              onChange={setRating}
+              {...register('vote_average', {min: 0, max: 10})}
             />
+            {errors.vote_average?.type === 'min' && <ErrorText>Rating must be greater than 0</ErrorText>}
+            {errors.vote_average?.type === 'max' && <ErrorText>Rating must be less than 10</ErrorText>}
           </LabeledInput>
         </MovieFormRightCol>
       </MovieFormRow>
       <MovieFormRow>
         <MovieFormLeftCol>
           <LabeledInput label={'Genre'}>
-            <Select
-              optionList={Object.values(Genres)}
-              bordered={true}
-              placeholder={'Select Genre'}
-              initValue={movie?.relevantGenres[0]}
-              onChange={(g) => setRelevantGenres([g])}
+            <Controller
+              name={'genres'}
+              control={control}
+              rules={{required: true}}
+              render={({ field }) => {
+                return (
+                  <StyledSelect
+                    classNames={{
+                      control: (state) => state.isFocused ? 'focused' : ''
+                    }}
+                    placeholder={'Select Genre'}
+                    options={options}
+                    isMulti
+                    {...field}
+                  />
+                );
+              }}
             />
+            {errors.genres && <ErrorText>Select at least one genre to proceed</ErrorText>}
           </LabeledInput>
         </MovieFormLeftCol>
         <MovieFormRightCol>
-          <LabeledInput label={'Runtime'}>
-            <Input<number>
+          <LabeledInput label={'Runtime (min)'}>
+            <Input
               type={'number'}
-              initValue={movie?.duration}
+              defaultValue={movie?.duration}
               placeholder={'Minutes'}
-              onChange={setDuration}
+              {...register('runtime', {required: true})}
             />
+            {errors.runtime && <ErrorText>Runtime is required</ErrorText>}
           </LabeledInput>
         </MovieFormRightCol>
       </MovieFormRow>
@@ -132,18 +185,24 @@ function MovieForm({ movie, onChange }: Props) {
           <LabeledInput label={'Overview'}>
             <Textarea
               placeholder={'Movie Description'}
-              initValue={movie?.description}
-              onChange={setDescription}
+              defaultValue={movie?.description}
+              {...register('overview')}
             />
           </LabeledInput>
         </MovieFormLeftCol>
       </MovieFormRow>
       <MovieFormRow>
-        <Button type={'reset'} theme={'secondary'}>Reset</Button>
+        <Button
+          type={'reset'}
+          theme={'secondary'}
+          onClick={onReset}
+        >
+          Reset
+        </Button>
         <SubmitButton type={'submit'}>Submit</SubmitButton>
       </MovieFormRow>
     </MovieFormContainer>
   );
-};
+}
 
 export default MovieForm;

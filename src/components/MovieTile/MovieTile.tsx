@@ -10,26 +10,26 @@ function MovieTile({ movie }: MovieTileProps) {
   const { search } = useLocation();
 
   return (
-    <Link
-      to={`/${movie.id}${search}`}
+    <div
       className={'movie-tile'}
       data-cy="movie-tile"
     >
-      <img src={movie.imageUrl} alt=""/>
-      <div className={'movie-tile__description'}>
-        <div>
-          <h3>{movie.movieName}</h3>
-          <span>{movie.relevantGenres.join(', ')}</span>
+      <Link to={`/${movie.id}${search}`}>
+        <img src={movie.imageUrl} alt=""/>
+        <div className={'movie-tile__description'}>
+          <div>
+            <h3>{movie.movieName}</h3>
+            <span>{movie.relevantGenres.join(', ')}</span>
+          </div>
+          <div className={'movie-tile__description-year'}>{movie.releaseYear}</div>
         </div>
-        <div className={'movie-tile__description-year'}>{movie.releaseYear}</div>
-      </div>
-
-      <div className={'movie-tile__kebab-menu'}>
+      </Link>
+      <Link to={`/${movie.id}/edit${search}`} className={'movie-tile__kebab-menu'}>
         <div></div>
         <div></div>
         <div></div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 

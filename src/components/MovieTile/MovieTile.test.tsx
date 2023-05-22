@@ -14,7 +14,7 @@ describe('MovieTile', () => {
     description: `Some description.`,
     duration: 100,
     rating: 6.1,
-    releaseYear: 2016,
+    releaseYear: '2016',
     relevantGenres: [Genres.DOCUMENTARY]
   };
 

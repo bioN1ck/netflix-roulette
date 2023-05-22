@@ -1,14 +1,6 @@
-import { BaseSyntheticEvent } from 'react';
 import styled from 'styled-components';
 
-
-type Props = {
-  initValue?: string;
-  placeholder?: string;
-  onChange?: (value: string) => void;
-}
-
-const TextareaBody = styled('textarea')`
+const Textarea = styled('textarea')`
   width: 100%;
   height: 197px;
   background: rgba(50, 50, 50, 0.95);
@@ -25,21 +17,5 @@ const TextareaBody = styled('textarea')`
   color: #ffffff;
   resize: none;
 `;
-
-function Textarea({
-  initValue = '',
-  placeholder = '',
-  onChange = () => {}
-}: Props) {
-  const handleValueChange = ({ target }: BaseSyntheticEvent) => onChange(target.value);
-
-  return (
-    <TextareaBody
-      defaultValue={initValue}
-      placeholder={placeholder}
-      onChange={handleValueChange}
-    />
-  );
-}
 
 export default Textarea;

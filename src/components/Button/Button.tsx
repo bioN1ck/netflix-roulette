@@ -8,6 +8,7 @@ type Props = {
   theme?: 'primary' | 'secondary' | 'blurred';
   type?:  'button' | 'submit' | 'reset';
   size?: 'small' | 'large';
+  onClick?: () => void;
   className?: string;
 }
 
@@ -66,10 +67,17 @@ function Button({
   type = 'button',
   size = 'large',
   className,
+  onClick,
   children
 }: PropsWithChildren<Props>) {
   return (
-    <ButtonBody className={`${className} ${theme} ${size}`} type={type}>{children}</ButtonBody>
+    <ButtonBody
+      className={`${className} ${theme} ${size}`}
+      type={type}
+      onClick={onClick}
+    >
+      {children}
+    </ButtonBody>
   );
 }
 

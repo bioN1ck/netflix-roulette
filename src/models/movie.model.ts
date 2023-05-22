@@ -4,7 +4,7 @@ export type Movie = {
   id?: number;
   imageUrl: string;
   movieName: string;
-  releaseYear: number;
+  releaseYear: string;
   rating: number;
   duration: number;
   description: string;
