@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import MovieListPage from './MovieListPage';
 
 const MOVIES_RESPONSE = {
@@ -26,8 +27,8 @@ const MOVIES_RESPONSE = {
 
 describe('MovieListPage', () => {
   it('should render', async () => {
-    render(<MovieListPage />);
+    render(<MovieListPage />, { wrapper: BrowserRouter });
 
-    expect(screen.getByText('FIND YOUR MOVIE')).toBeInTheDocument();
+    expect(screen.getByText('netflix')).toBeInTheDocument();
   });
 });

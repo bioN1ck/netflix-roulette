@@ -1,57 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Genres } from '../../models/genres.model';
 import { Movie } from '../../models/movie.model';
-import bg from '../../assets/bg.png';
-import search from '../../assets/search.svg';
-import { BG_COLOR, PRIMARY_COLOR } from '../../styles/constants';
+import { BG_COLOR } from '../../styles/constants';
 
-import { SortControl, SortOption } from '../SortControl/SortControl';
-import Button from '../Button/Button';
-import Search from '../Search/Search';
+import { Fields, searchMovie } from '../../helpers/functions';
+import SortControl, { SortOption } from '../SortControl/SortControl';
 import GenreSelect from '../GenreSelect/GenreSelect';
-import MovieDetails from '../MovieDetails/MovieDetails';
 import MovieTile from '../MovieTile/MovieTile';
+import Logo from '../Logo/Logo';
 
-
-type MovieResponse = {
-  budget: number;
-  genres: string[];
-  id: number;
-  overview: string;
-  poster_path: string;
-  release_date: string;
-  revenue: number;
-  runtime: number;
-  tagline: string;
-  title: string;
-  vote_average: number;
-  vote_count: number;
-}
-
-const mapMovie = (res: MovieResponse): Movie => ({
-  imageUrl: res.poster_path,
-  movieName: res.title,
-  relevantGenres: res.genres as Genres[],
-  releaseYear: new Date(res.release_date).getFullYear(),
-  duration: res.runtime,
-  description: res.overview,
-  rating: res.vote_average,
-});
 
 const MovieListPageContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-`;
-
-const MovieListPageHeader = styled.div`
-  height: 396px;
-  background-image: url(${bg});
-  background-position: center;
-  padding: 20px 60px;
-  box-sizing: border-box;
+  background-color: ${BG_COLOR};
 `;
 
 const MovieListPageRow = styled.div`
@@ -78,33 +44,6 @@ const MovieListPageRow = styled.div`
       bottom: 0;
     }
   }
-`;
-
-const MovieListPageLogo = styled.div`
-  display: inline-block;
-  font-size: 20px;
-  color: ${PRIMARY_COLOR};
-  font-weight: 500;
-  span {
-    font-weight: 900;
-  }
-`;
-
-const NetflixRouletteLogo = () => (
-  <MovieListPageLogo>
-    <span>netflix</span>roulette
-  </MovieListPageLogo>
-);
-
-const MovieListPageSearchContainer = styled.div`
-  padding: 0 3.75rem;
-`;
-
-const MovieListPageSearchTitle = styled.div`
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 2.375rem;
-  letter-spacing: 1.1px;
 `;
 
 const MovieListPageDivider = styled.div`
@@ -145,95 +84,66 @@ const MovieListPageFooter = styled.div`
   margin-top: auto;
 `;
 
-const MovieListPageDetailsContainer = styled.div`
-  background: ${BG_COLOR};
-  padding: 24px 60px 30px;
-  box-sizing: border-box;
-`;
-
-const MovieListPageSearchButton = styled.button`
-  width: 50px;
-  height: 50px;
-  background: url(${search}) no-repeat 50% 50%;
-  border-radius: 50%;
-`;
-
 
 function MovieListPage() {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sortCriterion, setSortCriterion] = useState<SortOption>(SortOption.RELEASE_DATE);
-  const [activeGenre, setActiveGenre] = useState<Genres>(Genres.ALL);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [movieList, setMovieList] = useState<Movie[]>([]);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [total, setTotal] = useState(0);
+
+  const isInitialMount = useRef(true);
+
+  const handleSorting = (option: SortOption) => {
+    option === SortOption.TITLE
+      ? searchParams.set(Fields.SORT_BY, 'title')
+      : searchParams.set(Fields.SORT_BY, 'release_date');
+    searchParams.sort();
+    setSearchParams(searchParams);
+  };
+
+  const handleGenreSelection = (genre: Genres) => {
+    genre !== Genres.ALL
+      ? searchParams.set(Fields.FILTER, genre)
+      : searchParams.delete(Fields.FILTER);
+    searchParams.sort();
+    setSearchParams(searchParams);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
-    const url = 'http://localhost:4000/movies';
 
-    fetch(
-      `${url}?` + new URLSearchParams({
-        search: searchQuery,
-        searchBy: 'title',
-        sortOrder: 'asc',
-        sortBy: sortCriterion === SortOption.TITLE ? 'title' : 'release_date',
-        filter: activeGenre === Genres.ALL ? '' : activeGenre,
-        limit: '12',
-      }),
-      {
-        method: 'get',
-        signal: controller.signal,
-      })
-      .then(res => res.json())
-      .then(({ data, totalAmount }) => {
-        setMovieList(data.map(mapMovie));
-        setTotal(totalAmount);
-      })
-      .catch(() => {
-        setMovieList([]);
-        setTotal(0);
-      });
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      searchMovie(controller.signal, searchParams)
+        .then(({ movies, total }) => {
+          setMovieList(movies);
+          setTotal(total);
+        })
+        .catch(() => {
+          setMovieList([]);
+          setTotal(0);
+        });
+    }
 
     return () => { controller.abort() };
-  }, [searchQuery, sortCriterion, activeGenre]);
+  }, [searchParams]);
 
   return (
     <MovieListPageContainer>
-      {selectedMovie
-        ? <MovieListPageDetailsContainer data-cy="movie-details">
-            <MovieListPageRow align={'center'}>
-              <NetflixRouletteLogo />
-              <MovieListPageSearchButton onClick={() => setSelectedMovie(null)} />
-            </MovieListPageRow>
-            <MovieDetails movie={selectedMovie} />
-          </MovieListPageDetailsContainer>
-        : <MovieListPageHeader data-cy="movie-search-bar">
-            <MovieListPageRow align={'flex-start'}>
-              <NetflixRouletteLogo />
-              <Button size={'small'} theme={'blurred'}>
-                + Add Movie
-              </Button>
-            </MovieListPageRow>
-            <MovieListPageSearchContainer>
-              <MovieListPageSearchTitle>
-                FIND YOUR MOVIE
-              </MovieListPageSearchTitle>
-              <Search onSearch={setSearchQuery} />
-            </MovieListPageSearchContainer>
-          </MovieListPageHeader>
-      }
+      <Outlet />
       <MovieListPageDivider />
 
       <MovieListPageBody>
         <MovieListPageRow align={'center'} className={'bordered'}>
           <GenreSelect
             genres={Object.values(Genres)}
-            preSelectedGenre={activeGenre}
-            onSelect={setActiveGenre}
+            preSelectedGenre={searchParams.get(Fields.FILTER) as Genres || Genres.ALL}
+            onSelect={handleGenreSelection}
           />
           <SortControl
-            initValue={SortOption.RELEASE_DATE}
-            onSelect={setSortCriterion}
+            initValue={searchParams.get(Fields.SORT_BY) === 'title' ? SortOption.TITLE : SortOption.RELEASE_DATE}
+            onSelect={handleSorting}
           />
         </MovieListPageRow>
         <MovieListPageRow align={'center'}>
@@ -244,14 +154,13 @@ function MovieListPage() {
             <MovieTile
               key={index}
               movie={movie}
-              onClick={setSelectedMovie}
             />
           ))}
         </MovieListPageSearchResultGrid>
       </MovieListPageBody>
 
       <MovieListPageFooter>
-        <NetflixRouletteLogo />
+        <Logo />
       </MovieListPageFooter>
     </MovieListPageContainer>
   );

@@ -80,7 +80,7 @@ type SortControlProps = {
 
 const options = Object.values(SortOption);
 
-export function SortControl({ onSelect, initValue }: SortControlProps) {
+export default function SortControl({ onSelect, initValue }: SortControlProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(initValue);
 

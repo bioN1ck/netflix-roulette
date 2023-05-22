@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { SortControl, SortOption } from './SortControl';
+import SortControl, { SortOption } from './SortControl';
 
 
 describe('SortControl', () => {
