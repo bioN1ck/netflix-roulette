@@ -40,7 +40,7 @@ function GenreSelect({
   }
 
   return (
-    <div className={'genre-select'} role="tablist">
+    <div className={'genre-select'} role="tablist" data-cy="genre-select">
       {genres.map((genre, id) => {
         return (
           <button

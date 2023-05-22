@@ -12,13 +12,13 @@ describe('SortControl', () => {
   });
 
   it('should render an initial option', () => {
-    render(<SortControl />);
+    render(<SortControl initValue={SortOption.RELEASE_DATE} />);
 
     expect(screen.getByText(SortOption.RELEASE_DATE)).toBeInTheDocument();
   });
 
   it('should open an option-list by click', () => {
-    render(<SortControl />);
+    render(<SortControl initValue={SortOption.RELEASE_DATE} />);
 
     const header = screen.getByTestId('sort-control-header');
 

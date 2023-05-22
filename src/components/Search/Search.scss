@@ -3,9 +3,11 @@
   line-height: 24px;
   color: #fff;
   margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: nowrap;
 
   input {
-    width: 513px;
+    flex: 1;
     height: 57px;
     margin-right: 14px;
     background: rgba(50, 50, 50, 0.8);

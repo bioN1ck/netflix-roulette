@@ -1,22 +1,21 @@
 import './MovieTile.scss';
 import { Movie } from '../../models/movie.model';
 
-type MovieTileProps = Omit<Movie, 'rating' | 'duration' | 'description'> & {
-  onClick: () => void;
+type MovieTileProps = {
+  movie: Movie;
+  onClick: (movie: Movie) => void;
 }
 
-export function MovieTile({ imageUrl, movieName, releaseYear, relevantGenres, onClick }: MovieTileProps) {
-  const handleClick = () => onClick();
-
+function MovieTile({ movie, onClick }: MovieTileProps) {
   return (
-    <div className={'movie-tile'} onClick={handleClick}>
-      <img src={imageUrl} alt=""/>
+    <div className={'movie-tile'} onClick={() => onClick(movie)} data-cy="movie-tile">
+      <img src={movie.imageUrl} alt=""/>
       <div className={'movie-tile__description'}>
         <div>
-          <h3>{movieName}</h3>
-          <span>{relevantGenres.join(', ')}</span>
+          <h3>{movie.movieName}</h3>
+          <span>{movie.relevantGenres.join(', ')}</span>
         </div>
-        <div className={'movie-tile__description-year'}>{releaseYear}</div>
+        <div className={'movie-tile__description-year'}>{movie.releaseYear}</div>
       </div>
 
       <div className={'movie-tile__kebab-menu'}>
@@ -27,3 +26,5 @@ export function MovieTile({ imageUrl, movieName, releaseYear, relevantGenres, on
     </div>
   );
 }
+
+export default MovieTile;

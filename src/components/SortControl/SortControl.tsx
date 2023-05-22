@@ -8,6 +8,8 @@ const BG_COLOR = '#424242';
 const SortControlContainer = styled('div')`
   display: flex;
   align-items: center;
+  letter-spacing: 1.1px;
+  z-index: 1;
 `;
 
 const SortControlLabel = styled('div')`
@@ -23,7 +25,7 @@ const SortControlHeader = styled('div')`
   color: ${TEXT_COLOR};
   
   position: relative;
-  width: 190px;
+  width: 197px;
   box-sizing: border-box;
   text-align: right;
   text-transform: uppercase;
@@ -72,14 +74,15 @@ export enum SortOption {
 }
 
 type SortControlProps = {
+  initValue?: SortOption;
   onSelect?: (option: SortOption) => void;
 }
 
 const options = Object.values(SortOption);
 
-export function SortControl({ onSelect }: SortControlProps) {
+export function SortControl({ onSelect, initValue }: SortControlProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(SortOption.RELEASE_DATE);
+  const [selectedOption, setSelectedOption] = useState(initValue);
 
   const toggling = (): void => setIsOpen(!isOpen);
 
@@ -94,10 +97,10 @@ export function SortControl({ onSelect }: SortControlProps) {
   return (
     <SortControlContainer>
       <SortControlLabel>Sort by</SortControlLabel>
-      <SortControlHeader onClick={toggling} data-testid="sort-control-header">
+      <SortControlHeader onClick={toggling} data-testid="sort-control-header" data-cy="sort-control">
         {selectedOption} <SortControlArrowDown />
         {isOpen && (
-          <SortControlList data-testid="sort-control-list">
+          <SortControlList data-testid="sort-control-list" data-cy="sort-control-list">
             {options.map((option, i) => (
               <SortControlListItem onClick={onOptionClicked(option)} key={i}>
                 {option}

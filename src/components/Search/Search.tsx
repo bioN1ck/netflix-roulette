@@ -28,7 +28,7 @@ function Search({ initialValue = '', onSearch }: SearchProps) {
   }
 
   return (
-    <div className={'search'}>
+    <div className={'search'} data-cy="search">
       <input
         type="text"
         ref={inputRef}
